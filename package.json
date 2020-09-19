@@ -1,0 +1,73 @@
+{
+  "name": "hyper-kappa-chat-app",
+  "version": "1.0.0",
+  "description": "Chat app using kappa-core",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test",
+    "test-browser": "npm run build-test && start test.html",
+    "build": "cross-env BABEL_DISABLE_CACHE=1 browserify -t [ babelify --global ] --standalone datSdk index.js > dat-sdk-bundle.js",
+    "build-chat-example": "browserify -t [ babelify --global ] -t [ sveltify --svelte [ --hydratable=true ] ] --debug chatapp/main.js > chatapp/bundle.js && start chatapp/index.html",
+    "update-deps": "npm install --save hyperswarm@latest hypercore@latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DougAnderson444/hyper-kappa-chat-app.git"
+  },
+  "keywords": [
+    "dat",
+    "kappa-core",
+    "hyperdrive",
+    "hypercore",
+    "p2p"
+  ],
+  "author": "Doug S Anderson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DougAnderson444/hyper-kappa-chat-app/issues"
+  },
+  "browser": {
+    "dat-dns": "./dns-web.js",
+    "hyperswarm": "hyperswarm-web",
+    "sodium-native": "@geut/sodium-javascript-plus",
+    "sodium-universal": "@geut/sodium-javascript-plus"
+  },
+  "homepage": "https://github.com/DougAnderson444/hyper-kappa-chat-app#readme",
+  "files": [
+    "README.md",
+    "index.js",
+    "dns-web.js",
+    "babel.config.json"
+  ],
+  "dependencies": {
+    "@geut/sodium-javascript-plus": "0.0.6",
+    "dat-dns": "^4.0.0",
+    "dat-encoding": "^5.0.1",
+    "delay": "^4.4.0",
+    "hyperswarm": "^2.15.0",
+    "hyperswarm-web": "^1.0.2",
+    "kappa-core": "^6.0.0",
+    "kappa-view-list": "^1.2.0",
+    "level-mem": "^5.0.1",
+    "multifeed": "github:kappa-db/multifeed",
+    "pify": "^5.0.0",
+    "pump": "^3.0.0",
+    "random-access-idb": "random-access-storage/random-access-idb",
+    "tmp": "^0.1.0",
+    "random-access-memory": "^3.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.11.5",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "chai": "^4.2.0",
+    "cross-env": "^7.0.2",
+    "mocha": "^8.1.3",
+    "random-access-file": "^2.1.3",
+    "svelte": "^3.25.1",
+    "sveltify": "^3.0.0",
+    "util": "^0.12.2"
+  }
+}
