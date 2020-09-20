@@ -48,6 +48,7 @@
   let textIn;
   var feed;
   var isBrowser;
+  var pristine = false;
 
   onMount(async () => {
     // This will run your code
@@ -77,52 +78,53 @@
     }
   });
 
-  // Dat-SDK makes use of JavaScript promises
-  // You'll usually want to use it from an async function
   async function main() {
-    // Wrap your code in try-catch to handle errors
-
-    // This time we're going to create two instances of the SDK to simulate there being two peers
-    //var { Multifeed } = await SDK({ persist: true }); // "not-opened" issues?
-
     const storage = getNewStorage();
-    //var multi = Multifeed(storage, { valueEncoding: "json" });
+
     var multi = multifeed(storage, { valueEncoding: "json" }); // too many calls
+    // if you make you own multifeed, you have access to it's events, like on feed:
+    multi.on("feed", function(feed, num) {
+      //output += `<br/>Added feed: ${num} / ${feed.key.toString("hex")}`;
+    });
 
     const kappaOpts = { valueEncoding: "json", multifeed: multi };
     var core = kappa(null, kappaOpts);
     core.use("chats", timestampView);
 
     core.ready("chats", () => {
-      watchTail();
       // wait until core writer is ready before connecting to swarm
       core.writer("local", function(err, f) {
         if (err) console.error(err);
         feed = f;
-
         // swarm logic
         const topicHex = crypto
           .createHash("sha256")
           .update("our-topic")
           .digest();
         startSwarm(topicHex);
-
-        // Print the last saved entries
-        core.api.chats.read({ limit: 10, reverse: true }, function(err, msgs) {
-          if (err) console.error(err);
-          if (msgs.length > 0) {
-            for (var i = msgs.length - 1; i >= 0; i--) {
-              output += `<br/>${msgs[i].value.timestamp} - ${msgs[i].value.nickname}: ${msgs[i].value.text}`;
-            }
-          } else {
-            doWrite(feed, `Brand new chat is loaded. `);
-          }
-        });
+        watchTail(); // listen for updates to the lastest messages
+        readTail(10); // initial read, since tail only triggers on new append()
       });
     });
 
+    function readTail(number) {
+      // Print the last saved entries
+      core.api.chats.read({ limit: number, reverse: true }, function(
+        err,
+        msgs
+      ) {
+        if (err) console.error(err);
+        if (msgs.length > 0) {
+          for (var i = msgs.length - 1; i >= 0; i--) {
+            output += `<br/>${msgs[i].value.timestamp} - ${msgs[i].value.nickname}: ${msgs[i].value.text}`;
+          }
+        }
+      });
+    }
     function watchTail() {
-      core.api.chats.tail(1, function(msgs) {
+      core.api.chats.tail(10, function(msgs) {
+        // output = ""; //only show the lastest messages
+        output += `<br/>----------TAIL-----------------`;
         msgs.forEach(function(msg, i) {
           output += `<br/>${msg.value.timestamp} - ${msg.value.nickname}: ${msg.value.text}`;
         });
@@ -139,11 +141,16 @@
       });
       swarm.on("connection", function(connection, info) {
         output += `<br/>New peer connected!`;
-        pump(
-          connection,
-          core.replicate(info.client, { live: true }),
-          connection
-        );
+
+        const stream = core.replicate(info.client, { live: true });
+        stream.on("remote-feeds", function() {
+          // output += `<br/>remote-feeds fired. Refreshing tail.`;
+          // too soon, view not ready yet?
+          // how do I tell when the view has loade all these new feeds?
+          // using a new view does nothing except duplicate
+        });
+
+        pump(connection, stream, connection);
       });
     }
   }
