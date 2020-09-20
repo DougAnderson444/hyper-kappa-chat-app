@@ -1,6 +1,6 @@
 {
   "name": "hyper-kappa-chat-app",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Chat app using kappa-core",
   "main": "index.js",
   "scripts": {
