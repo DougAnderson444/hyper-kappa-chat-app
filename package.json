@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test",
-    "test-browser": "npm run build-test && start test.html",
-    "build": "cross-env BABEL_DISABLE_CACHE=1 browserify -t [ babelify --global ] --standalone datSdk index.js > dat-sdk-bundle.js",
-    "build-chat-example": "browserify -t [ babelify --global ] -t [ sveltify --svelte [ --hydratable=true ] ] --debug chatapp/main.js > chatapp/bundle.js && start chatapp/index.html",
+    "build-chat": "browserify -t [ babelify --global ] -t [ sveltify --svelte [ --hydratable=true ] ] --debug chatapp/main.js > chatapp/bundle.js && start chatapp/index.html",
     "update-deps": "npm install --save hyperswarm@latest hypercore@latest"
   },
   "repository": {
@@ -15,7 +13,6 @@
     "url": "git+https://github.com/DougAnderson444/hyper-kappa-chat-app.git"
   },
   "keywords": [
-    "dat",
     "kappa-core",
     "hyperdrive",
     "hypercore",
@@ -27,7 +24,6 @@
     "url": "https://github.com/DougAnderson444/hyper-kappa-chat-app/issues"
   },
   "browser": {
-    "dat-dns": "./dns-web.js",
     "hyperswarm": "hyperswarm-web",
     "sodium-native": "@geut/sodium-javascript-plus",
     "sodium-universal": "@geut/sodium-javascript-plus"
@@ -36,25 +32,23 @@
   "files": [
     "README.md",
     "index.js",
-    "dns-web.js",
     "babel.config.json"
   ],
   "dependencies": {
     "@geut/sodium-javascript-plus": "0.0.6",
-    "dat-dns": "^4.0.0",
     "dat-encoding": "^5.0.1",
     "delay": "^4.4.0",
     "hyperswarm": "^2.15.0",
     "hyperswarm-web": "^1.0.2",
     "kappa-core": "^6.0.0",
-    "kappa-view-list": "^1.2.0",
+    "kappa-view-list": "../kappa-view-list",
     "level-mem": "^5.0.1",
     "multifeed": "github:kappa-db/multifeed",
     "pify": "^5.0.0",
     "pump": "^3.0.0",
     "random-access-idb": "random-access-storage/random-access-idb",
-    "tmp": "^0.1.0",
-    "random-access-memory": "^3.1.1"
+    "random-access-memory": "^3.1.1",
+    "tmp": "^0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
