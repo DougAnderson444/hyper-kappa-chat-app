@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node test",
     "build-chat": "browserify -t [ babelify --global ] -t [ sveltify --svelte [ --hydratable=true ] ] --debug chatapp/main.js > chatapp/bundle.js && start chatapp/index.html",
+    "build-sdkappa-bundle": "browserify -t [ babelify --global ] --standalone sdkappa index.js > sdkappa-bundle.js",
     "update-deps": "npm install --save hyperswarm@latest hypercore@latest"
   },
   "repository": {

@@ -18,5 +18,5 @@ TODO
  - [ ] Dynamic topic
  - [ ] WebRTC checks (currently need to refresh sometimes?)
  - [ ] Multiple same domains open without breaking...
- - [ ] Fix load feed if local db was cleared
- - [ ] Fix kappa load of missed messages
+ - [x] Fix load feed if local db was cleared
+ - [x] Fix kappa load of missed messages
