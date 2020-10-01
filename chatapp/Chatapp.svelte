@@ -6,6 +6,7 @@
 
   var hyperswarm = require("hyperswarm");
   var crypto = require("crypto");
+  const hcrypto = require("hypercore-crypto");
   var kappa = require("kappa-core");
   var memdb = require("level-mem");
   var list = require("kappa-view-list");
@@ -97,11 +98,12 @@
         if (err) console.error(err);
         feed = f;
         // swarm logic
-        const topicHex = crypto
-          .createHash("sha256")
-          .update("our-topic")
-          .digest();
-        startSwarm(topicHex);
+        //const topicHex = crypto.createHash("sha256").update("our-topic").digest();
+        //const seed = crypto.createHash("sha256").update("our-topic").digest(); // seed needs to be 32 bytes
+        // Somebody gives you their public key
+        let rootKey =
+          "dee2fc9db57f409cfa5edea42aa40790f3c1b314e3630a04f25b75ad42b71835";
+        startSwarm(rootKey);
         watchTail(); // listen for updates to the lastest messages
         readTail(10); // initial read, since tail only triggers on new append()
       });
@@ -131,12 +133,21 @@
       });
     }
 
-    function startSwarm(topic) {
-      var swarm = hyperswarm();
-      output += `<br/>topic: ${topic.toString("hex")}`;
+    function startSwarm(rootKey) {
+      var swarm = hyperswarm(); //{ queue: { multiplex: true } }
 
-      swarm.join(topic, {
-        lookup: true, // find & connect to peers
+      const discoveryKey = hcrypto.discoveryKey(
+        Buffer.from(rootKey, "hex")
+      );
+
+      console.log("rootKey (publicKey): ", rootKey.toString("hex"));
+      console.log("discoveryKey: ", discoveryKey.toString("hex"));
+      
+      output += `<br/>rootKey: ${rootKey.toString("hex")}`;
+      output += `<br/>topic: ${discoveryKey.toString("hex")}`;
+
+      swarm.join(discoveryKey, {
+        lookup: true, // set to false in cloud, find & connect to peers
         announce: true // optional- announce self as a connection target
       });
       swarm.on("connection", function(connection, info) {
