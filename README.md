@@ -1,5 +1,7 @@
 # Hyper Kappa Chat App
 
+Repo to build a kappa bundle that works in the browser.
+
 A working chat app built on kappa-core, multifeed, and hypercore. Browser user experience is done through Svelte.
 
 ## How use this?
