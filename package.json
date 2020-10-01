@@ -1,6 +1,6 @@
 {
   "name": "hyper-kappa-chat-app",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Chat app using kappa-core",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,7 @@
     "url": "https://github.com/DougAnderson444/hyper-kappa-chat-app/issues"
   },
   "browser": {
-    "hyperswarm": "hyperswarm-web",
-    "sodium-native": "@geut/sodium-javascript-plus",
-    "sodium-universal": "@geut/sodium-javascript-plus"
+    "hyperswarm": "hyperswarm-web"
   },
   "homepage": "https://github.com/DougAnderson444/hyper-kappa-chat-app#readme",
   "files": [
@@ -36,19 +34,25 @@
     "babel.config.json"
   ],
   "dependencies": {
+    "@DougAnderson444/random-access-idb": "github:DougAnderson444/random-access-idb",
+    "@corestore/networker": "^1.0.3",
     "@geut/sodium-javascript-plus": "0.0.6",
+    "corestore": "^5.7.3",
     "dat-encoding": "^5.0.1",
     "delay": "^4.4.0",
-    "hyperswarm": "^2.15.0",
-    "hyperswarm-web": "^1.0.2",
+    "hypercore-crypto": "^2.1.1",
+    "hypermultifeed": "github:DougAnderson444/hypermultifeed",
+    "hyperswarm": "^2.15.2",
+    "hyperswarm-web": "^2.1.0",
     "kappa-core": "^6.0.0",
-    "kappa-view-list": "../kappa-view-list",
+    "kappa-view-list": "github:DougAnderson444/kappa-view-list",
     "level-mem": "^5.0.1",
     "multifeed": "github:kappa-db/multifeed",
     "pify": "^5.0.0",
     "pump": "^3.0.0",
-    "random-access-idb": "random-access-storage/random-access-idb",
+    "random-access-idb": "github:random-access-storage/random-access-idb",
     "random-access-memory": "^3.1.1",
+    "random-access-web": "^2.0.3",
     "tmp": "^0.1.0"
   },
   "devDependencies": {
